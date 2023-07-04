@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Alien Numeral Converter</title>
+</head>
+<link rel="stylesheet" href="style.css">
+<body>
+    <div class="container">
+        <div class="symbol-value-table">
+            <table>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>A</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>B</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td>Z</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>L</td>
+                    <td>50</td>
+                </tr>
+                <tr>
+                    <td>C</td>
+                    <td>100</td>
+                </tr>
+                <tr>
+                    <td>D</td>
+                    <td>500</td>
+                </tr>
+                <tr>
+                    <td>R</td>
+                    <td>1000</td>
+                </tr>
+            </table>
+        </div>
+        <div class="converter">
+            <h2>Alien Numeral Converter</h2>
+            <form id="alienNumeralForm">
+                <div class="form-group">
+                    <label for="alienNumeralInput">Alien Numeral:</label>
+                    <input type="text" id="alienNumeralInput" placeholder="Enter Alien Numeral" required>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Convert to an Integer">
+                </div>
+            </form>
+            <div id="resultContainer" class="result"></div>
+            <div id="explanationContainer" class="explanation"></div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('alienNumeralForm');
+        const resultContainer = document.getElementById('resultContainer');
+        const explanationContainer = document.getElementById('explanationContainer');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const alienNumeralInput = document.getElementById('alienNumeralInput').value;
+            const { result, explanation } = alienToInt(alienNumeralInput);
+            resultContainer.innerText = `Converted Result: ${result}`;
+            explanationContainer.innerText = `Explanation: ${explanation}`;
+        });
+
+        function alienToInt(s) {
+            const symbolValues = {
+                'A': 1,
+                'B': 5,
+                'Z': 10,
+                'L': 50,
+                'C': 100,
+                'D': 500,
+                'R': 1000
+            };
+
+            let result = 0;
+            const n = s.length;
+            let explanation = '';
+
+            for (let i = 0; i < n; i++) {
+                const currentValue = symbolValues[s[i]];
+                const nextValue = symbolValues[s[i + 1]];
+
+                if (nextValue && currentValue < nextValue) {
+                    result -= currentValue;
+                    explanation += `${s[i]} = -${currentValue}`;
+                } else {
+                    result += currentValue;
+                    explanation += `${s[i]} = ${currentValue}`;
+                }
+
+                if (i !== n - 1) {
+                    explanation += ', ';
+                }
+            }
+
+            return { result, explanation };
+        }
+    </script>
+</body>
+</html>
